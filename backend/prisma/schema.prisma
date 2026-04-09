@@ -15,10 +15,56 @@ model User {
 }
 
 model Hero {
-  id         String   @id @default(uuid())
-  name       String
-  superpower String
-  alias      String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id              String      @id @default(uuid())
+  externalId      Int        @unique // Para mapear con el ID de la API (ej: 1)
+  name            String
+  slug            String
+  
+  // Estadísticas (Relación 1:1)
+  powerstats      Powerstats?
+  
+  // Apariencia
+  gender          String?
+  race            String?
+  height          String[]    // Array [ "6'8", "203 cm" ]
+  weight          String[]    // Array [ "980 lb", "441 kg" ]
+  eyeColor        String?
+  hairColor       String?
+  
+  // Biografía simplificada en la tabla principal o relación
+  fullName        String?
+  alterEgos       String?
+  aliases         String[]
+  placeOfBirth    String?
+  firstAppearance String?
+  publisher       String?
+  alignment       String?     // good, bad, neutral
+  
+  // Trabajo y Conexiones
+  occupation      String?     @db.Text
+  base            String?     @db.Text
+  groupAffiliation String?    @db.Text
+  relatives       String?     @db.Text
+  
+  // Imágenes (Podemos usar JSON o campos individuales)
+  imageXs         String?
+  imageSm         String?
+  imageMd         String?
+  imageLg         String?
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Powerstats {
+  id           String @id @default(uuid())
+  intelligence Int    @default(0)
+  strength     Int    @default(0)
+  speed        Int    @default(0)
+  durability   Int    @default(0)
+  power        Int    @default(0)
+  combat       Int    @default(0)
+  
+  hero         Hero   @relation(fields: [heroId], references: [id], onDelete: Cascade)
+  heroId       String @unique
 }

@@ -1,0 +1,64 @@
+<div
+appGlassParallax
+  class="group relative overflow-hidden bg-[#1c2026] rounded-xl border border-cyan-500/15 hover:scale-[1.02] transition-all duration-300 shadow-lg shadow-black/50"
+>
+  <div class="h-64 relative">
+    <img
+      [src]="hero().imageMd"
+      [alt]="hero().name"
+      class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+    />
+
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-[#1c2026] via-transparent to-transparent"
+    ></div>
+
+    <div
+      class="absolute top-4 right-4 px-3 py-1 rounded-full text-[10px] font-bold tracking-tighter uppercase"
+      [ngClass]="{
+        'bg-rose-500/80 text-white': hero().powerstats?.intelligence! < 30,
+        'bg-cyan-400/20 border border-cyan-400/50 text-cyan-400':
+          hero().powerstats?.intelligence! >= 30,
+      }"
+    >
+      {{ hero().powerstats?.intelligence! < 30 ? 'CRITICAL' : 'STABLE' }}
+    </div>
+  </div>
+
+  <div class="p-6 pt-0 relative -mt-12">
+    <h2
+      class="text-3xl font-black font-headline uppercase italic text-cyan-400 tracking-tighter drop-shadow-[0_0_8px_rgba(0,242,255,0.4)]"
+    >
+      {{ hero().name }}
+    </h2>
+
+    <div class="flex items-center gap-4 mt-4">
+      <div class="flex-1">
+        <div
+          class="flex justify-between text-[10px] font-medium uppercase text-slate-500 mb-1 tracking-widest"
+        >
+          <span>INTELLECTUAL SYNC</span>
+          <span>{{ hero().powerstats?.intelligence }}%</span>
+        </div>
+        <div class="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+          <div
+            class="h-full bg-gradient-to-r from-cyan-400 to-fuchsia-500 shadow-[0_0_12px_rgba(0,242,255,0.8)]"
+            [style.width.%]="hero().powerstats?.intelligence"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 flex justify-between items-center">
+      <div class="flex gap-2">
+        <span class="material-symbols-outlined text-slate-500 text-sm">bolt</span>
+        <span class="material-symbols-outlined text-slate-500 text-sm">shield</span>
+      </div>
+      <button
+        class="bg-slate-700/40 hover:bg-cyan-500/20 hover:text-cyan-400 px-4 py-1.5 rounded-lg text-[10px] font-bold tracking-widest uppercase transition-all duration-200 border border-transparent hover:border-cyan-500/30"
+      >
+        Details
+      </button>
+    </div>
+  </div>
+</div>
