@@ -1,0 +1,29 @@
+services:
+  # Base de Datos
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: heroes_db
+    ports:
+      - "5432:5432"
+
+  # Backend (NestJS/Express)
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://user:password@db:5432/heroes_db"
+    depends_on:
+      - db
+
+  # Frontend (Angular)
+  frontend:
+    build: 
+      context: ./frontend/heroes-mindata
+    ports:
+      - "8080:80" # Mapeamos el puerto 80 del contenedor al 4200 local
+    depends_on:
+      - backend

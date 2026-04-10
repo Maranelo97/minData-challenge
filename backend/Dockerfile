@@ -1,29 +1,32 @@
 # Usamos Node 20 sobre Alpine para que sea liviano
 FROM node:20-alpine
 
-# Instalamos dependencias necesarias para que Prisma funcione en Alpine
+# Instalamos dependencias necesarias para Prisma y scripts en Alpine
 RUN apk add --no-cache openssl
 
 WORKDIR /app
 
-# Copiamos los archivos de configuración primero para aprovechar la caché de capas
+# 1. Copiamos archivos de dependencias
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Instalamos todas las dependencias
+# 2. Instalamos dependencias
 RUN npm install
 
-# Copiamos el resto del código (incluyendo el datosHero.json)
+# 3. Copiamos el resto del código (Incluye datosHero.json y los .ts de prisma)
 COPY . .
 
-# Generamos el cliente de Prisma para que esté disponible en el contenedor
+# 4. Generamos el cliente de Prisma
 RUN npx prisma generate
 
-# Compilamos el código de TypeScript a JavaScript
+# 5. Compilamos TS a JS
 RUN npm run build
 
-# Exponemos el puerto de nuestra API
+# 6. Damos permisos de ejecución al script de arranque
+RUN chmod +x docker-bootstrap.sh
+
+# Exponemos el puerto de la API
 EXPOSE 3000
 
-# Arrancamos la aplicación
-CMD ["npm", "run", "start"]
+# IMPORTANTE: Usamos el script de bootstrap para correr migraciones + seeds + server
+CMD ["./docker-bootstrap.sh"]

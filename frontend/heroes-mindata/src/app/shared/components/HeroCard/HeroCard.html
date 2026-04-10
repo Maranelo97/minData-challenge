@@ -1,5 +1,5 @@
 <div
-appGlassParallax
+  appGlassParallax
   class="group relative overflow-hidden bg-[#1c2026] rounded-xl border border-cyan-500/15 hover:scale-[1.02] transition-all duration-300 shadow-lg shadow-black/50"
 >
   <div class="h-64 relative">
@@ -15,11 +15,12 @@ appGlassParallax
 
     <div
       class="absolute top-4 right-4 px-3 py-1 rounded-full text-[10px] font-bold tracking-tighter uppercase"
-      [ngClass]="{
-        'bg-rose-500/80 text-white': hero().powerstats?.intelligence! < 30,
-        'bg-cyan-400/20 border border-cyan-400/50 text-cyan-400':
-          hero().powerstats?.intelligence! >= 30,
-      }"
+      [class.bg-rose-500/80]="hero().powerstats?.intelligence! < 30"
+      [class.text-white]="hero().powerstats?.intelligence! < 30"
+      [class.bg-cyan-400/20]="hero().powerstats?.intelligence! >= 30"
+      [class.border]="hero().powerstats?.intelligence! >= 30"
+      [class.border-cyan-400/50]="hero().powerstats?.intelligence! >= 30"
+      [class.text-cyan-400]="hero().powerstats?.intelligence! >= 30"
     >
       {{ hero().powerstats?.intelligence! < 30 ? 'CRITICAL' : 'STABLE' }}
     </div>
