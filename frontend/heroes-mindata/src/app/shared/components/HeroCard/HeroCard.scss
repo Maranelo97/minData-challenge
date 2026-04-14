@@ -1,3 +1,193 @@
 :host {
   display: block;
 }
+
+// Efecto de barrido en la barra de poder
+.scanline-bar {
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent);
+  animation: bar-scan 2s infinite;
+}
+
+@keyframes bar-scan {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// Estilo del nombre del héroe con profundidad
+.hero-name {
+  text-shadow:
+    2px 2px 0px rgba(0, 0, 0, 0.8),
+    0 0 20px currentColor;
+  position: relative;
+
+  &:hover {
+
+    text-overflow: clip;
+
+    &::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 2px;
+      text-shadow: -2px 0 #ff00c1;
+      background: #0c0f14;
+      overflow: hidden;
+      clip: rect(0, 900px, 0, 0);
+      animation: noise-2 3s infinite linear alternate-reverse;
+    }
+  }
+
+  // Pequeño detalle: decoración de esquina en el título
+  &::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    width: 4px;
+    height: 70%;
+    background: currentColor;
+    transform: translateY(-50%);
+    box-shadow: 0 0 10px currentColor;
+  }
+}
+
+// Efecto Scanline (Líneas de monitor)
+.scanlines {
+  background: linear-gradient(to bottom,
+      transparent 50%,
+      rgba(0, 0, 0, 0.5) 51%, // Línea negra más fuerte
+      transparent 52%);
+  background-size: 100% 4px;
+  animation: scanline-float 10s linear infinite;
+
+  // Añadimos un tinte de color muy sutil para dar ese look de cristal
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.2));
+  }
+}
+
+@keyframes scanline-float {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 0 100%;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+
+  // Requiere duplicar el texto o ajustar el ancho
+}
+
+@keyframes energy-pulse {
+  0% {
+    box-shadow: 0 0 20px -10px var(--pulse-color),
+      inset 0 0 10px rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+
+  50% {
+    box-shadow: 0 0 35px -5px var(--pulse-color),
+      inset 0 0 20px var(--pulse-color-low);
+    border-color: var(--pulse-color-low);
+  }
+
+  100% {
+    box-shadow: 0 0 20px -10px var(--pulse-color),
+      inset 0 0 10px rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.hero-card-master {
+
+  // Definimos variables según la facción para que la animación sea dinámica
+  &.vanguard-unit {
+    --pulse-color: rgba(0, 242, 255, 0.5);
+    --pulse-color-low: rgba(0, 242, 255, 0.2);
+  }
+
+  &.rogue-unit {
+    --pulse-color: rgba(244, 63, 94, 0.5);
+    --pulse-color-low: rgba(244, 63, 94, 0.2);
+  }
+
+  position: relative;
+  background: #0c0f14;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  animation: energy-pulse 4s infinite ease-in-out; // El pulso constante
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+
+  &:hover {
+    transform: translateY(-10px) scale(1.02);
+    animation: none; // Frenamos el pulso suave para un glow intenso fijo
+    box-shadow: 0 0 50px -10px var(--pulse-color),
+      inset 0 0 30px var(--pulse-color-low);
+    border-color: var(--pulse-color);
+    z-index: 50;
+  }
+}
+
+.card-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  pointer-events: none;
+  z-index: 60;
+
+  &.top-left {
+    top: -1px;
+    left: -1px;
+    border-top-color: currentColor;
+    border-left-color: currentColor;
+  }
+
+  &.bottom-right {
+    bottom: -1px;
+    right: -1px;
+    border-bottom-color: currentColor;
+    border-right-color: currentColor;
+  }
+}
+
+.identify-btn {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+
+  &:hover {
+    // Usamos las variables definidas en .hero-card-master
+    background-color: var(--pulse-color-low);
+    border-color: var(--pulse-color);
+    box-shadow: 0 0 15px var(--pulse-color-low);
+    color: white;
+    letter-spacing: 0.3em; // Un pequeño efecto de expansión extra
+    transform: translateY(-1px);
+  }
+
+  // Opcional: un pequeño efecto de brillo al hacer click
+  &:active {
+    transform: scale(0.95);
+    background-color: var(--pulse-color);
+  }
+}

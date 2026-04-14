@@ -1,0 +1,43 @@
+<div 
+  class="fixed inset-0 z-[65] bg-black/60 backdrop-blur-sm transition-all duration-500"
+  [class.opacity-0]="!drawerService.isOpen()"
+  [class.pointer-events-none]="!drawerService.isOpen()"
+  (click)="drawerService.close()">
+</div>
+
+<aside
+  class="fixed right-0 top-0 h-full w-[450px] z-[9999] bg-slate-900/40 backdrop-blur-3xl border-l border-white/10 flex flex-col transition-transform duration-500"
+  [class.translate-x-full]="!drawerService.isOpen()"
+>
+  @if (drawerService.options(); as opt) {
+    <header class="p-8 pb-4 flex justify-between items-start">
+      <div>
+        <h2 class="text-4xl font-black italic tracking-tighter uppercase text-primary-container">
+          {{ opt.title }}
+        </h2>
+        <p class="text-xs font-label text-secondary uppercase tracking-[0.2em]">
+          {{ opt.subtitle || 'System Access v4.2' }}
+        </p>
+      </div>
+      <button (click)="drawerService.close()" class="text-outline hover:text-white cursor-pointer">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </header>
+
+    <div class="flex-1 overflow-y-auto p-8 pt-0">
+      @switch (opt.mode) {
+        @case ('DETAILS') {
+          <app-hero-details [hero]="opt.data" />
+        }
+      
+        @case ('CREATE') {
+          <app-hero-create [mode]="'CREATE'" />
+        }
+        @case ('EDIT') {
+          <app-hero-edit [mode]="'EDIT'" [hero]="opt.data" />
+        }
+         
+      }
+    </div>
+  }
+</aside>

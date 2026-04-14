@@ -16,8 +16,8 @@ export interface Hero {
   race?: string;
   fullName?: string;
   publisher?: string;
-  alignment?: string;
+  alignment: string;
   imageSm?: string;
   imageMd?: string;
-  powerstats?: Powerstats;
+  powerstats: Powerstats;
 }

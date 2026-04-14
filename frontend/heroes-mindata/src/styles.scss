@@ -1,73 +1,79 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Space+Grotesk:wght@300;700&display=swap');
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  /* Evita el doble scroll */
+}
+
 @theme {
-    /* Surface Philosophy */
-    --color-vanguard-bg: #0A0E14;
-    /* surface_container_lowest */
-    --color-vanguard-surface: #10141a;
-    /* surface */
-    --color-vanguard-card: #181c22;
-    /* surface_container_low */
+  /* Surface Philosophy */
+  --color-vanguard-bg: #0A0E14;
+  /* surface_container_lowest */
+  --color-vanguard-surface: #10141a;
+  /* surface */
+  --color-vanguard-card: #181c22;
+  /* surface_container_low */
 
-    /* Power Accents */
-    --color-primary-neon: #00f2ff;
-    /* Cyan */
-    --color-secondary-neon: #fface8;
-    /* Magenta */
-    --color-on-surface-variant: #c0c7d0;
-    --color-outline-vanguard: rgba(0, 242, 255, 0.2);
+  /* Power Accents */
+  --color-primary-neon: #00f2ff;
+  --color-primary-neon-50: rgba(0, 242, 255, 0.5);
+  /* Cyan */
+  --color-secondary-neon: #fface8;
+  /* Magenta */
+  --color-on-surface-variant: #c0c7d0;
+  --color-outline-vanguard: rgba(0, 242, 255, 0.2);
 
-    /* Typography: Cinematic Scale */
-    --font-display: "Space Grotesk", sans-serif;
-    --font-label: "Inter", sans-serif;
+  /* Typography: Cinematic Scale */
+  --font-display: "Space Grotesk", sans-serif;
+  --font-label: "Inter", sans-serif;
 
-    /* Custom Animations para el vibe cinematográfico */
-    @keyframes scanline {
-        from {
-            transform: translateY(-100%);
-        }
-
-        to {
-            transform: translateY(100%);
-        }
+  /* Custom Animations para el vibe cinematográfico */
+  @keyframes scanline {
+    from {
+      transform: translateY(-100%);
     }
+
+    to {
+      transform: translateY(100%);
+    }
+  }
 }
 
 /* --- Estilos Base Globales --- */
 :root {
-    background-color: var(--color-vanguard-bg);
-    color: #dfe2eb;
-    font-family: var(--font-label);
-    -webkit-font-smoothing: antialiased;
+  background-color: var(--color-vanguard-bg);
+  color: #dfe2eb;
+  font-family: var(--font-label);
+  -webkit-font-smoothing: antialiased;
 }
 
 h1,
 h2,
 h3,
 .font-vanguard {
-    font-family: var(--font-display);
-    letter-spacing: -0.05em;
+  font-family: var(--font-display);
+  letter-spacing: -0.05em;
 }
 
-/* Regla de Oro: No-Line Rule aplicada a todas las utilidades de borde */
 @utility no-border {
-    border: none;
-    box-shadow: 0 0 0 1px var(--color-outline-vanguard);
+  border: none;
+  box-shadow: 0 0 0 1px var(--color-outline-vanguard);
 }
 
-/* Efecto Power Bar para reusar en toda la app */
 @utility power-bar-gradient {
-    background: linear-gradient(90deg, var(--color-primary-neon), var(--color-secondary-neon));
+  background: linear-gradient(90deg, var(--color-primary-neon), var(--color-secondary-neon));
 }
 
 @utility scanlines {
-  background: linear-gradient(
-    to bottom,
-    transparent 50%,
-    rgba(0, 242, 255, 0.05) 51%,
-    transparent 52%
-  );
+  background: linear-gradient(to bottom,
+      transparent 50%,
+      rgba(0, 242, 255, 0.05) 51%,
+      transparent 52%);
   background-size: 100% 4px;
   animation: scanline-scroll 60s linear infinite;
 }
@@ -77,29 +83,59 @@ h3,
 }
 
 @keyframes scanline-scroll {
-  from { background-position: 0 0; }
-  to { background-position: 0 100%; }
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 0 100%;
+  }
 }
 
 @keyframes flicker {
-  0% { opacity: 0.98; }
-  50% { opacity: 1; }
-  100% { opacity: 0.99; }
+  0% {
+    opacity: 0.98;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.99;
+  }
 }
 
 
 .custom-scrollbar {
-  &::-webkit-scrollbar { width: 4px; }
-  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
   &::-webkit-scrollbar-thumb {
     background: rgba(0, 242, 255, 0.3);
     border-radius: 10px;
-    &:hover { background: rgba(0, 242, 255, 0.6); }
+
+    &:hover {
+      background: rgba(0, 242, 255, 0.6);
+    }
   }
 }
-
-// Para que el Virtual Scroll se comporte como un grid
 .cdk-virtual-scroll-content-wrapper {
-  display: block !important; // Permitir que los inline-blocks fluyan
+  display: block !important;
   width: 100%;
+}
+
+.glare-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 100; 
+  pointer-events: none; 
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  mix-blend-mode: overlay; 
 }

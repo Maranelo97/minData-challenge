@@ -1,11 +1,13 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, computed } from '@angular/core';
 import { HeroesService } from './services/HeroesService';
 import { CommonModule } from '@angular/common';
 import { HeroCard } from '../../shared/components/HeroCard/HeroCard';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { SearchBar } from './components/SearchBar/SearchBar';
+
 @Component({
   selector: 'app-heroes',
-  imports: [CommonModule, ScrollingModule, HeroCard],
+  imports: [CommonModule, ScrollingModule, HeroCard, SearchBar],
   templateUrl: './Heroes.html',
   styleUrl: './Heroes.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -13,11 +15,13 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 export class Heroes {
   public heroesService = inject(HeroesService);
 
-  // Seleccionamos los signals del servicio
+  // Mantenemos los originales
   public heroes = this.heroesService.heroes;
   public isLoading = this.heroesService.isLoading;
 
-  // TrackBy para optimizar el re-renderizado
+  // Mostramos solo los primeros 30 para avanzar rápido
+  public limitedHeroes = computed(() => this.heroes().slice(0, 30));
+
   trackByHeroId(index: number, hero: any): string {
     return hero.id;
   }

@@ -1,0 +1,56 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.8) 100%);
+  z-index: 65; // Por debajo del aside (70) pero por encima de las cards (10)
+  backdrop-filter: blur(4px);
+  cursor: zoom-out; // Indica que al hacer click se cierra/aleja
+
+  // Opcional: un sutil tinte según el bando
+  &.vanguard {
+    background-color: rgba(0, 242, 255, 0.05);
+  }
+
+  &.rogue {
+    background-color: rgba(244, 63, 94, 0.05);
+  }
+}
+
+aside {
+  // O la clase que uses para el contenedor del drawer
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 450px;
+  z-index: 9999; // Un valor masivo para dominar a todas las cards
+
+  // SOLUCIÓN AL SCROLL
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  // Estética de scrollbar Cyberpunk (opcional)
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--pulse-color, #00f2ff);
+    border-radius: 10px;
+  }
+
+  // Backdrop para evitar clicks fuera mientras está abierto
+  &.is-open::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    left: -100vw; // Cubre toda la pantalla a la izquierda
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: -1;
+  }
+}

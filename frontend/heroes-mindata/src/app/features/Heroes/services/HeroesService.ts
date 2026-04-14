@@ -3,12 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Hero } from '../../../core/models/frontend/IHeroFront';
 import { BehaviorSubject, catchError, Observable, of, switchMap, tap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { environment } from '../../../enviroment';
 @Injectable({
   providedIn: 'root',
 })
 export class HeroesService {
   private http = inject(HttpClient);
-  private readonly API_URL = 'http://localhost:3000/api/heroes';
 
   // 1. Fuentes de la verdad (Private Streams)
   // Usamos un BehaviorSubject para controlar la búsqueda
@@ -44,11 +44,11 @@ export class HeroesService {
    * Petición HTTP pura
    */
   private fetchHeroes(name: string): Observable<Hero[]> {
-    const url = name ? `${this.API_URL}?name=${name}` : this.API_URL;
+    const url = name ? `${environment.API_URL}?name=${name}` : `${environment.API_URL}/heroes`;
     return this.http.get<Hero[]>(url);
   }
 
   getHeroById(id: string): Observable<Hero> {
-    return this.http.get<Hero>(`${this.API_URL}/${id}`);
+    return this.http.get<Hero>(`${environment.API_URL}/${id}`);
   }
 }
