@@ -40,10 +40,10 @@
 
 .vanguard-grid {
   display: grid;
-  // Esto crea columnas de al menos 280px que se estiran para llenar el espacio
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  // Ajustamos el grid para que sea responsivo
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 2.5rem;
-  padding-bottom: 3rem; // Espacio al final
+  width: 100%;
 }
 .hero-card-container {
   // Aseguramos que la card tenga su ancho pero que pueda crecer si hay espacio
@@ -61,4 +61,14 @@
     background: rgba(0, 242, 255, 0.2);
     border-radius: 10px;
   }
+}
+
+.hero-render-wrapper {
+  content-visibility: auto;
+  contain-intrinsic-size: 320px 550px; 
+  
+  min-height: 500px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }

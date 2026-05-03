@@ -1,1 +1,31 @@
-<p>HeroGrid works!</p>,
+<main class="h-screen bg-[#0A0E14] flex flex-col p-8 overflow-hidden">
+  <header class="mb-8 flex justify-between">
+    <div>
+    <h1 class="text-5xl font-black text-white uppercase italic">
+      Active <span class="text-cyan-400">Vanguard</span>
+    </h1>
+    <p class="text-slate-500 text-[10px] tracking-[0.3em] mt-2">
+      UNITS_IN_RANGE: <span class="text-cyan-400">{{ heroes().length }}</span>
+    </p>
+    </div>
+    <div class="mt-6 max-w-xl">
+      <app-search-bar></app-search-bar>
+    </div>
+  </header>
+
+  <div class="flex-1 overflow-y-auto custom-scrollbar p-4">
+    <div class="vanguard-grid">
+      @for (hero of heroes(); track hero.id) {
+        @defer (on viewport) {
+          <div class="hero-render-wrapper">
+            <app-hero-card [hero]="hero"></app-hero-card>
+          </div>
+        } @placeholder {
+          <div class="min-h-[550px] bg-white/5 animate-pulse rounded-2xl"></div>
+        }
+      }
+    </div>
+    <app-paginator></app-paginator>
+  </div>
+
+</main>

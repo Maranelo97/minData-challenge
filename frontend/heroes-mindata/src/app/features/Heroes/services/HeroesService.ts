@@ -1,54 +1,105 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import {
+  BehaviorSubject,
+  catchError,
+  distinctUntilChanged,
+  Observable,
+  of,
+  switchMap,
+  tap,
+  debounceTime,
+  combineLatest,
+  map,
+} from 'rxjs';
+
 import { Hero } from '../../../core/models/frontend/IHeroFront';
-import { BehaviorSubject, catchError, Observable, of, switchMap, tap } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { environment } from '../../../enviroment';
-@Injectable({
-  providedIn: 'root',
-})
+import { PaginationService } from './PaginationService';
+
+@Injectable({ providedIn: 'root' })
 export class HeroesService {
   private http = inject(HttpClient);
+  private pagination = inject(PaginationService);
 
-  // 1. Fuentes de la verdad (Private Streams)
-  // Usamos un BehaviorSubject para controlar la búsqueda
+  // --- STATE ---
+  private fullDataCache: Hero[] | null = null;
   private searchSubject = new BehaviorSubject<string>('');
 
-  // 2. State de carga (Signal básica)
+  public searchQuery = signal<string>(''); // Texto crudo del input
   public isLoading = signal<boolean>(false);
 
-  // 3. El "Cerebro" de RxJS
-  // Este observable se encarga de reaccionar a cada cambio de búsqueda
-  private heroes$ = this.searchSubject.pipe(
+  // --- COMPUTED (PREDICCIONES INSTANTÁNEAS) ---
+  public predictions = computed(() => {
+    const term = this.searchQuery().toLowerCase().trim();
+    // Solo predecimos si hay caché y el usuario escribió 2+ caracteres
+    if (term.length < 2 || !this.fullDataCache) return [];
+
+    return this.fullDataCache.filter((hero) => hero.name.toLowerCase().includes(term)).slice(0, 5);
+  });
+
+  // --- STREAM PRINCIPAL (HEROES PAGINADOS) ---
+  private heroes$ = combineLatest([
+    this.searchSubject.pipe(
+      debounceTime(400),
+      distinctUntilChanged(),
+      tap(() => this.pagination.reset()), // Reset a pag 1 al buscar
+    ),
+    toObservable(this.pagination.currentPage),
+    toObservable(this.pagination.itemsPerPage),
+  ]).pipe(
     tap(() => this.isLoading.set(true)),
-    switchMap((term) => this.fetchHeroes(term)),
+    switchMap(([term, page, limit]) =>
+      this.fetchHeroes().pipe(
+        map((allHeroes) => {
+          // 1. Filtrado local (Expertise: Manejo de data en memoria)
+          const filtered = allHeroes.filter((h) =>
+            h.name.toLowerCase().includes(term.toLowerCase()),
+          );
+
+          // 2. Notificar al paginador el total de resultados filtrados
+          this.pagination.totalItems.set(filtered.length);
+
+          // 3. Segmentación (Paginación manual)
+          const startIndex = (page - 1) * limit;
+          return filtered.slice(startIndex, startIndex + limit);
+        }),
+      ),
+    ),
     tap(() => this.isLoading.set(false)),
-    catchError((err) => {
-      console.error('Data stream error:', err);
-      return of([]); // Recuperación elegante
-    }),
+    catchError(() => of([])),
   );
 
-  // 4. LA MAGIA: Convertimos el Observable a Signal para la UI
-  // Cualquier componente que lea 'heroes()' se suscribirá automáticamente
+  // Signal que consume el Grid
   public heroes = toSignal(this.heroes$, { initialValue: [] as Hero[] });
 
+  // --- MÉTODOS ---
+
   /**
-   * Actualiza el término de búsqueda y dispara el flujo RxJS
+   * Se llama desde el SearchBar (onSearch)
    */
-  updateSearch(name: string) {
-    this.searchSubject.next(name);
+  public updateSearch(name: string) {
+    this.searchQuery.set(name); // Dispara predictions()
+    this.searchSubject.next(name); // Dispara el stream heroes$ (con debounce)
   }
 
   /**
-   * Petición HTTP pura
+   * Obtiene los datos. Si ya están en caché, no hace petición HTTP.
    */
-  private fetchHeroes(name: string): Observable<Hero[]> {
-    const url = name ? `${environment.API_URL}?name=${name}` : `${environment.API_URL}/heroes`;
-    return this.http.get<Hero[]>(url);
+  private fetchHeroes(): Observable<Hero[]> {
+    if (this.fullDataCache) return of(this.fullDataCache);
+
+    return this.http.get<Hero[]>(`${environment.API_URL}/heroes`).pipe(
+      tap((data) => (this.fullDataCache = data)),
+      catchError((err) => {
+        console.error('Error fetching heroes:', err);
+        return of([]);
+      }),
+    );
   }
 
-  getHeroById(id: string): Observable<Hero> {
-    return this.http.get<Hero>(`${environment.API_URL}/${id}`);
+  public getHeroById(id: string): Observable<Hero> {
+    return this.http.get<Hero>(`${environment.API_URL}/heroes/${id}`);
   }
 }

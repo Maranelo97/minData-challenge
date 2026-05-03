@@ -1,3 +1,8 @@
-<router-outlet />
+@if (layoutService.showHUD()) {
+  <app-side-nav></app-side-nav>
+  <app-drawer></app-drawer>
+}
 
-<app-drawer></app-drawer>
+<main [class.with-hud]="layoutService.showHUD()">
+  <router-outlet></router-outlet>
+</main>

@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/AuthService';
+import { LOGIN_DYNAMIC_CONFIG } from '../../shared/components/dynamic-form/form-blueprints/login.config';
+import { FormBuilderService } from '../../shared/components/dynamic-form/FormBuilderService';
 
 @Component({
   selector: 'app-login',
@@ -12,34 +14,24 @@ import { AuthService } from '../../core/services/AuthService';
   standalone: true,
 })
 export class Login {
-  private fb = inject(FormBuilder);
+  private builder = inject(FormBuilderService);
   private authService = inject(AuthService);
 
   loading = signal(false);
-  errorMessage = signal<string | null>(null);
-
-  loginForm = this.fb.nonNullable.group({
-    email: ['admin@mindata.com', [Validators.required, Validators.email]],
-    password: ['admin123', [Validators.required]],
-  });
+  
+  // Buildamos el formulario dinámicamente
+  formStructure = this.builder.buildForm(LOGIN_DYNAMIC_CONFIG);
+  
+  // Shortcut para el template
+  get loginForm() { return this.formStructure.instance; }
 
   onSubmit() {
     if (this.loginForm.invalid) return;
-
     this.loading.set(true);
-    this.errorMessage.set(null);
-
-    // Llamamos al servicio con las credenciales
+    
     this.authService.login(this.loginForm.getRawValue()).subscribe({
-      next: () => {
-        console.log('Sincronización de sesión completa.');
-        // La redirección ocurre dentro del servicio (tap)
-      },
-      error: (err) => {
-        this.loading.set(false);
-        this.errorMessage.set(err.error?.message || 'Error de conexión con la terminal.');
-        console.error('Fallo en la autenticación:', err);
-      },
+      next: () => { /* Redirección */ },
+      error: () => this.loading.set(false)
     });
   }
 }

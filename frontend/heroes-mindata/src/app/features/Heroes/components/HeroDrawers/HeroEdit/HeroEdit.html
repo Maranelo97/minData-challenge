@@ -1,0 +1,77 @@
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8 h-full bg-[#0c0f14]/80 backdrop-blur-md">
+  
+  <div class="flex flex-col space-y-8 border-r border-white/5 pr-10">
+    <div class="flex justify-between items-end border-b border-primary-neon/20 pb-4">
+      <h2 class="text-3xl font-black italic text-primary-neon tracking-tighter uppercase">
+        {{ formStructure.config.title }}
+      </h2>
+      <span class="text-[9px] text-white/30 font-mono">ID: {{ hero().id }}</span>
+    </div>
+
+    <form [formGroup]="editForm" (ngSubmit)="onUpdate()" class="space-y-6 overflow-y-auto custom-scrollbar pr-4">
+      @for (field of formStructure.config.fields; track field.name) {
+        <div class="group relative">
+          <label class="text-[9px] uppercase tracking-[0.4em] text-white/40 group-focus-within:text-primary-neon transition-colors">
+            {{ field.label }}
+          </label>
+          
+          @if (field.type === 'select') {
+            <select [formControlName]="field.name" 
+                    class="w-full bg-transparent border-b border-white/10 py-2 text-lg font-bold text-white outline-none focus:border-primary-neon appearance-none transition-all">
+              @for (opt of field.options; track opt.value) {
+                <option [value]="opt.value" class="bg-vanguard-bg">{{ opt.label }}</option>
+              }
+            </select>
+          } @else {
+            <input
+              [formControlName]="field.name"
+              [type]="field.type"
+              class="w-full bg-transparent border-b border-white/10 py-2 text-lg font-display text-white outline-none focus:border-primary-neon transition-all"
+            />
+          }
+        </div>
+      }
+
+      <div class="pt-6">
+        <button
+          [disabled]="editForm.invalid"
+          class="w-full h-14 bg-primary-neon text-vanguard-bg font-black uppercase tracking-widest hover:brightness-125 transition-all disabled:opacity-30"
+        >
+          {{ formStructure.config.actions[0].label }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="relative flex flex-col items-center justify-center">
+    <div class="absolute top-0 left-0 w-full flex justify-between text-[7px] text-primary-neon/40 font-mono uppercase tracking-[0.5em]">
+      <span>Stat_Overrider_Active</span>
+      <span>VND_Core_v.9.0</span>
+    </div>
+
+    <div class="w-full aspect-square max-w-[400px] relative">
+       <app-hero-chart
+          class="w-full h-full cursor-crosshair" 
+          [hero]="liveHeroPreview()"
+          [isGood]="isGoodAlignment()"
+          (statsChange)="handleRadarChange($event)"
+          [editable]="true"
+          >
+        </app-hero-chart>
+        
+        <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
+            <p class="text-[8px] text-white/20 uppercase tracking-[0.3em] animate-pulse">
+                Click & Drag axis to override stats
+            </p>
+        </div>
+    </div>
+
+    <div class="mt-20 flex items-center gap-6 bg-white/5 p-4 border border-white/10 rounded-sm w-full">
+        <img [src]="hero().imageSm" class="w-16 h-16 object-cover grayscale opacity-50 border border-primary-neon/20">
+        <div>
+            <p class="text-primary-neon font-black italic text-xl uppercase tracking-tighter">{{ editForm.get('name')?.value }}</p>
+            <p class="text-[9px] text-white/40 uppercase tracking-widest">Editing_Protocol_Secure</p>
+        </div>
+    </div>
+  </div>
+</div>

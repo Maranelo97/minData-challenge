@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input} from '@angular/core';
 import { Hero } from '../../../core/models/frontend/IHeroFront';
 import { HeroCardService } from './HeroCardService';
 import { GlassParallaxDirective } from '../../directives/GlassParallax';

@@ -7,7 +7,7 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    // Le asignamos el componente de Login como "fallback", 
+    // Le asignamos el componente de Login como "fallback",
     // pero el canActivate decidirá el destino real.
     loadComponent: () => import('./features/Login/Login').then((m) => m.Login),
     canActivate: [
@@ -26,9 +26,8 @@ export const routes: Routes = [
       () => {
         const authService = inject(AuthService);
         const router = inject(Router);
-        // Si ya hay token, no mostramos el login, vamos a heroes
         return authService.isAuthenticated() ? router.parseUrl('/heroes') : true;
-      }
+      },
     ],
     loadComponent: () => import('./features/Login/Login').then((m) => m.Login),
   },

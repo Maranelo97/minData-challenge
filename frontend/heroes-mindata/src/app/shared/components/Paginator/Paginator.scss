@@ -1,0 +1,180 @@
+.pagination-container {
+  // --- Efecto Flotante y Glassmorphism ---
+  position: sticky;
+  bottom: 20px; // Separado del borde inferior
+  margin: 2rem auto;
+  width: fit-content; // No ocupa todo el ancho, flota en el centro
+  min-width: 450px;
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  
+  // Fondo con transparencia y desenfoque (Glass)
+  background: rgba(23, 13, 13, 0.6); 
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  
+  // Bordes estilo HUD
+  border: 1px solid rgba(0, 242, 255, 0.15);
+  border-radius: 100px; // Forma de cápsula para un look más moderno
+  
+  // Sombra para despegarlo del fondo
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(0, 242, 255, 0.05);
+
+  z-index: 100; // Por encima de las cards al scrollear
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  &:hover {
+    border-color: rgba(0, 242, 255, 0.4);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 242, 255, 0.1);
+    transform: translateY(-2px);
+  }
+
+  // --- Selector de Tamaño (Lado Izquierdo) ---
+  .page-size-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-right: 20px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+
+    .label {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 700;
+    }
+
+    .select-wrapper {
+      position: relative;
+      
+      select {
+        appearance: none;
+        background: rgba(0, 242, 255, 0.05);
+        border: 1px solid rgba(0, 242, 255, 0.2);
+        color: #00f2ff;
+        padding: 4px 28px 4px 12px;
+        border-radius: 20px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        outline: none;
+
+        &:focus {
+          border-color: #00f2ff;
+          background: rgba(0, 242, 255, 0.1);
+        }
+
+        option {
+          background: #0d1117; // Fondo sólido para el dropdown nativo
+          color: white;
+        }
+      }
+
+      .chevron-down {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 14px;
+        height: 14px;
+        fill: none;
+        stroke: #00f2ff;
+        stroke-width: 2;
+        pointer-events: none;
+      }
+    }
+  }
+
+  // --- Controles de Navegación (Lado Derecho) ---
+  .nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-left: 20px;
+
+    .btn-nav {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+      transition: all 0.3s ease;
+
+      .icon-svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      &:hover:not(:disabled) {
+        background: #00f2ff;
+        color: #0d1117;
+        border-color: #00f2ff;
+        box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+      }
+
+      &:disabled {
+        opacity: 0.15;
+        cursor: not-allowed;
+        filter: grayscale(1);
+      }
+    }
+
+    .page-indicator {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Space Grotesk', sans-serif;
+
+      .current {
+        color: #00f2ff;
+        font-size: 1.1rem;
+        font-weight: 800;
+        text-shadow: 0 0 8px rgba(0, 242, 255, 0.5);
+      }
+
+      .divider {
+        color: rgba(255, 255, 255, 0.2);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-weight: 300;
+      }
+
+      .total {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+// Media query para asegurar que no se rompa en móviles
+@media (max-width: 600px) {
+  .pagination-container {
+    min-width: 90%;
+    border-radius: 15px;
+    flex-direction: column;
+    gap: 15px;
+    padding: 1rem;
+    
+    .page-size-selector {
+      border-right: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-right: 0;
+      padding-bottom: 10px;
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}

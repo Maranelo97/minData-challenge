@@ -1,0 +1,48 @@
+<div class="pagination-container">
+  <div class="page-size-selector">
+    <span class="label">Mostrar</span>
+    <div class="select-wrapper">
+      <select 
+        [value]="pg.itemsPerPage()" 
+        (change)="onLimitChange($event)"
+      >
+        @for (option of pg.pageOptions; track option) {
+          <option [value]="option">{{ option }}</option>
+        }
+      </select>
+      <svg viewBox="0 0 24 24" class="chevron-down">
+        <path d="m7 10 5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="nav-controls">
+    <button 
+      class="btn-nav" 
+      (click)="pg.prevPage()" 
+      [disabled]="pg.isFirstPage()" 
+      aria-label="Página anterior"
+    >
+      <svg viewBox="0 0 24 24" class="icon-svg">
+        <path d="m15 18-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    
+    <div class="page-indicator">
+      <span class="current">{{ pg.currentPage() }}</span>
+      <span class="divider">de</span>
+      <span class="total">{{ pg.totalPages() }}</span>
+    </div>
+
+    <button 
+      class="btn-nav" 
+      (click)="pg.nextPage()" 
+      [disabled]="pg.isLastPage()" 
+      aria-label="Siguiente página"
+    >
+      <svg viewBox="0 0 24 24" class="icon-svg">
+        <path d="m9 18 6-6-6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</div>

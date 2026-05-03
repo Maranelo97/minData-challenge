@@ -37,53 +37,39 @@
       class="bg-vanguard-surface/40 backdrop-blur-3xl p-1 rounded-2xl border border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
     >
       <div class="bg-vanguard-bg/80 p-10 rounded-[calc(1rem-4px)]">
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-10">
-          <div class="group relative">
-            <label
-              class="absolute -top-6 left-0 text-[10px] uppercase tracking-[0.3em] text-white/30 group-focus-within:text-primary-neon transition-colors"
-            >
-              User_Identifier
-            </label>
-            <input
-              formControlName="email"
-              type="email"
-              class="w-full bg-transparent border-b border-white/10 py-4 text-xl font-display text-primary-neon outline-none transition-all focus:border-primary-neon placeholder:text-white/5"
-              placeholder="NAME@DOMAIN.COM"
-            />
-          </div>
+       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-10">
+  
+  @for (field of formStructure.config.fields; track field.name) {
+    <div class="group relative">
+      <label
+        [class]="field.colorTheme === 'primary' ? 'group-focus-within:text-primary-neon' : 'group-focus-within:text-secondary-neon'"
+        class="absolute -top-6 left-0 text-[10px] uppercase tracking-[0.3em] text-white/30 transition-colors"
+      >
+        {{ field.label }}
+      </label>
+      
+      <input
+        [formControlName]="field.name"
+        [type]="field.type"
+        [placeholder]="field.placeholder"
+        [class]="field.colorTheme === 'primary' ? 'text-primary-neon focus:border-primary-neon' : 'text-secondary-neon focus:border-secondary-neon'"
+        class="w-full bg-transparent border-b border-white/10 py-4 text-xl font-display outline-none transition-all placeholder:text-white/5"
+      />
+    </div>
+  }
 
-          <div class="group relative">
-            <label
-              class="absolute -top-6 left-0 text-[10px] uppercase tracking-[0.3em] text-white/30 group-focus-within:text-secondary-neon transition-colors"
-            >
-              Access_Keyphrase
-            </label>
-            <input
-              formControlName="password"
-              type="password"
-              class="w-full bg-transparent border-b border-white/10 py-4 text-xl font-display text-secondary-neon outline-none transition-all focus:border-secondary-neon placeholder:text-white/5"
-              placeholder="••••••••"
-            />
-          </div>
+  <button
+    [disabled]="loginForm.invalid || loading()"
+    class="group relative w-full h-16 flex items-center justify-center overflow-hidden transition-all active:scale-95 disabled:grayscale"
+  >
+    <div class="absolute inset-0 bg-gradient-to-r from-primary-neon to-secondary-neon translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"></div>
+    <div class="absolute inset-0 border border-primary-neon group-hover:border-transparent transition-colors"></div>
 
-          <button
-            [disabled]="loginForm.invalid || loading()"
-            class="group relative w-full h-16 flex items-center justify-center overflow-hidden transition-all active:scale-95 disabled:grayscale"
-          >
-            <div
-              class="absolute inset-0 bg-gradient-to-r from-primary-neon to-secondary-neon translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"
-            ></div>
-            <div
-              class="absolute inset-0 border border-primary-neon group-hover:border-transparent transition-colors"
-            ></div>
-
-            <span
-              class="relative z-10 font-display font-black uppercase tracking-widest text-primary-neon group-hover:text-vanguard-bg transition-colors"
-            >
-              {{ loading() ? 'ESTABLISHING LINK...' : 'INITIALIZE SESSION' }}
-            </span>
-          </button>
-        </form>
+    <span class="relative z-10 font-display font-black uppercase tracking-widest text-primary-neon group-hover:text-vanguard-bg transition-colors">
+      {{ loading() ? 'ESTABLISHING LINK...' : formStructure.config.actions[0].label }}
+    </span>
+  </button>
+</form>
       </div>
     </div>
 

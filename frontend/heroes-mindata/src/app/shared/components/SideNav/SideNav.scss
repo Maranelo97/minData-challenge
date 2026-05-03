@@ -1,3 +1,198 @@
 :host {
   display: block;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+}
+
+.sidenav-wrapper {
+  height: 100%;
+  width: 240px; // Ancho por defecto (Expandido)
+  background: rgba(10, 10, 15, 0.8);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-right: 1px solid rgba(0, 242, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 0;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+
+  // --- ESTADO COLAPSADO ---
+  &.collapsed {
+    width: 40px; // Ancho mínimo para iconos
+
+    .toggle-btn svg {
+      transform: rotate(0deg); // Flechas hacia la derecha
+    }
+
+    .nav-item {
+      padding: 0.8rem 0;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .status-indicator {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      margin-top: 1rem;
+    }
+  }
+
+  // --- BOTÓN DE CONTROL (TOGGLE) ---
+  .toggle-btn {
+    background: rgba(0, 242, 255, 0.05);
+    border: 1px solid rgba(0, 242, 255, 0.2);
+    color: #00f2ff;
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 2.5rem;
+    margin-left: 3px;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.4s ease;
+      transform: rotate(180deg); // Flechas hacia la izquierda (estado expandido)
+    }
+
+    &:hover {
+      background: rgba(0, 242, 255, 0.2);
+      box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+    }
+  }
+
+  // --- CONTENEDOR DE RUTAS ---
+  .nav-items {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  // --- ITEMS DE NAVEGACIÓN ---
+  .nav-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 0.8rem 1.8rem;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    border: none;
+    background: transparent;
+    width: 100%;
+    cursor: pointer;
+
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+    }
+
+    .nav-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    // Indicador lateral activo
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 3px;
+      height: 0;
+      background: #00f2ff;
+      box-shadow: 0 0 10px #00f2ff;
+      transition: height 0.3s ease;
+    }
+
+    &:hover,
+    &.active {
+      color: #00f2ff;
+      background: rgba(0, 242, 255, 0.05);
+
+      &::before {
+        height: 60%;
+      }
+    }
+
+    // --- ESTILO ESPECÍFICO LOGOUT ---
+    &.logout-btn {
+      margin-top: auto;
+      margin-bottom: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 1.5rem;
+
+      &:hover {
+        color: #ff4b4b;
+        background: rgba(255, 75, 75, 0.05);
+
+        &::before {
+          background: #ff4b4b;
+          box-shadow: 0 0 10px #ff4b4b;
+        }
+      }
+    }
+  }
+
+  // --- FOOTER Y STATUS ---
+  .nav-footer {
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(0, 242, 255, 0.5);
+      font-size: 0.6rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      white-space: nowrap;
+
+      .dot {
+        width: 6px;
+        height: 6px;
+        background: #00f2ff;
+        border-radius: 50%;
+        box-shadow: 0 0 8px #00f2ff;
+        animation: pulse 2s infinite;
+      }
+    }
+  }
+}
+
+// --- ANIMACIÓN DE PULSACIÓN PARA EL STATUS ---
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.3;
+    transform: scale(1.2);
+  }
 }

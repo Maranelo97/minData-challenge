@@ -10,6 +10,17 @@ body {
   /* Evita el doble scroll */
 }
 
+main {
+  transition: padding-left 0.4s ease; // Para que el contenido se desplace suave al expandir/colapsar
+  width: 100%;
+  min-height: 100vh;
+  
+  // Si el HUD está activo, empujamos el contenido para no taparlo con el SideNav
+  &.with-hud {
+    padding-left: 80px; // El ancho colapsado del SideNav
+  }
+}
+
 @theme {
   /* Surface Philosophy */
   --color-vanguard-bg: #0A0E14;

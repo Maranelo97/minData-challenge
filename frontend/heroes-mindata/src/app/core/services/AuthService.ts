@@ -16,26 +16,28 @@ export class AuthService {
   private readonly TOKEN_KEY = 'tokenHeroes';
   private platformId = inject(PLATFORM_ID);
   private browser = inject(BrowserService);
-  // El estado de la sesión como un Signal
-  // Intentamos recuperar el token al iniciar
   private _token = signal<string | null>(this.browser.getLocalStorage(this.TOKEN_KEY));
-
-  // Computed signal para saber si estamos autenticados (solo lectura)
   public isAuthenticated = computed(() => !!this._token());
 
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
-      const savedToken = localStorage.getItem('tokenHeroes');
-      this._token.set(savedToken);
+      if (this.isTokenExpired()) {
+        this.logout();
+      } else {
+        const savedToken = localStorage.getItem('tokenHeroes');
+        this._token.set(savedToken);
+      }
     }
   }
 
   login(credentials: LoginCredentials) {
     return this.http.post<AuthResponse>(`${this.API_URL}/login`, credentials).pipe(
       tap((response) => {
+        const now = Date.now().toString();
+
         this._token.set(response.token);
-        // Guardado seguro sin IFs manuales
         this.browser.setLocalStorage(this.TOKEN_KEY, response.token);
+        this.browser.setLocalStorage('token_timestamp', now);
         this.browser.setLocalStorage('userHeroes', JSON.stringify(response.user));
 
         this.router.navigate(['/heroes']);
@@ -43,6 +45,23 @@ export class AuthService {
     );
   }
 
+  isTokenExpired(): boolean {
+    const timestamp = this.browser.getLocalStorage('token_timestamp');
+    if (!timestamp) return true;
+
+    const threeHours = 3 * 60 * 60 * 1000;
+    const expirationTime = parseInt(timestamp) + threeHours;
+
+    return Date.now() > expirationTime;
+  }
+
+  checkSessionStatus() {
+    if (this.isTokenExpired()) {
+      this.logout();
+      return false;
+    }
+    return true;
+  }
   logout() {
     this._token.set(null);
     localStorage.removeItem('tokenHeroes');

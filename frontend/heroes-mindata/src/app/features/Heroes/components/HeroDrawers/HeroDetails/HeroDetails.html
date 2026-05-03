@@ -1,0 +1,55 @@
+<div class="relative w-full aspect-square mb-10 group">
+  <div class="absolute inset-0 radar-grid opacity-20 border border-cyan-500/30 animate-pulse pointer-events-none z-0"></div>
+
+  <app-hero-chart 
+    class="relative z-10 block w-full h-full"
+    [hero]="hero()" 
+    [isGood]="hero().alignment.toLowerCase() === 'good'"
+    [editable]="false"
+    >
+  </app-hero-chart>
+</div>
+
+<div class="space-y-6 mb-10">
+  <div class="flex flex-col gap-2">
+    <label class="text-[10px] font-label text-outline tracking-widest uppercase">Hero Identifier</label>
+    <div class="bg-surface-container-highest border-b-2 border-cyan-500/50 p-3 text-primary font-black uppercase italic tracking-tighter text-xl">
+      {{ hero().name }}
+    </div>
+  </div>
+  
+  <div class="flex flex-col gap-2">
+    <label class="text-[10px] font-label text-outline tracking-widest uppercase">Current Publisher</label>
+    <div class="bg-surface-container-highest border-b-2 border-secondary/50 p-3 text-primary font-black uppercase italic tracking-tighter text-xl">
+      {{ hero().publisher }}
+    </div>
+  </div>
+</div>
+
+<div class="flex flex-col gap-4 mb-10">
+  <h3 class="text-xs font-label text-outline tracking-widest uppercase mb-2">
+    MISSION LOGS (RECENT)
+  </h3>
+  <div class="space-y-3">
+    <div class="flex items-center justify-between p-4 bg-slate-950/40 rounded-lg border-l-2 border-cyan-500 hover:bg-slate-900 transition-colors">
+      <div>
+        <p class="text-[10px] font-label text-cyan-400 tracking-widest uppercase">OP: NEON RAIN</p>
+        <p class="text-xs font-bold text-white text-uppercase">{{ hero().name }} DEPLOYMENT</p>
+      </div>
+      <span class="text-[10px] font-label text-outline">2H AGO</span>
+    </div>
+  </div>
+</div>
+
+<div class="mt-auto pt-6">
+  <button class="w-full relative h-16 rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(0,242,255,0.25)] group active:scale-95 transition-all">
+    <div class="absolute inset-0 bg-gradient-to-r from-primary-container to-primary-fixed-dim"></div>
+    <div class="relative flex items-center justify-center gap-3">
+      <span class="material-symbols-outlined text-on-primary font-bold animate-spin-slow">sync</span>
+      <span class="text-on-primary font-black text-lg tracking-widest uppercase italic">SYNC NEURAL DATA</span>
+    </div>
+  </button>
+  <p class="text-center text-[8px] font-label text-outline mt-4 tracking-[0.4em] uppercase animate-pulse">
+    Encrypted Neural Uplink Established
+  </p>
+</div>

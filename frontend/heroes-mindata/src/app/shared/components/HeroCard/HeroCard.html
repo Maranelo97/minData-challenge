@@ -4,32 +4,47 @@
   [class.vanguard-unit]="view().isGood"
   [class.rogue-unit]="!view().isGood"
 >
-<div class="absolute top-4 left-4 z-50">
-  <button 
-    (click)="$event.stopPropagation(); openEdit()"
-    class="relative group/edit flex items-center p-2 rounded-sm transition-all duration-500 ease-out cursor-pointer overflow-hidden border shadow-[0_0_20px_rgba(0,0,0,0.6)]"
-    [class.bg-cyan-500]="view().isGood"
-    [class.border-cyan-400]="view().isGood"
-    [class.bg-rose-600]="!view().isGood"
-    [class.border-rose-400]="!view().isGood"
-  >
-    <div class="absolute inset-0 bg-white/20 opacity-0 group-hover/edit:opacity-100 transition-opacity duration-300"></div>
-    
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white drop-shadow-md z-10 transition-transform duration-500 group-hover/edit:rotate-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-    </svg>
+  <div class="absolute top-4 left-4 z-50">
+    <button
+      (click)="$event.stopPropagation(); openEdit()"
+      class="relative group/edit flex items-center p-2 rounded-sm transition-all duration-500 ease-out cursor-pointer overflow-hidden border shadow-[0_0_20px_rgba(0,0,0,0.6)]"
+      [class.bg-cyan-500]="view().isGood"
+      [class.border-cyan-400]="view().isGood"
+      [class.bg-rose-600]="!view().isGood"
+      [class.border-rose-400]="!view().isGood"
+    >
+      <div
+        class="absolute inset-0 bg-white/20 opacity-0 group-hover/edit:opacity-100 transition-opacity duration-300"
+      ></div>
 
-    <span class="max-w-0 opacity-0 group-hover/edit:max-w-[100px] group-hover/edit:opacity-100 group-hover/edit:ml-2 whitespace-nowrap text-[10px] font-black text-white tracking-tighter transition-all duration-500 ease-in-out uppercase z-10">
-      Edit Unit
-    </span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-4 h-4 text-white drop-shadow-md z-10 transition-transform duration-500 group-hover/edit:rotate-12"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+        />
+      </svg>
 
-    <div 
-      class="absolute -inset-1 blur-lg opacity-40 group-hover/edit:opacity-100 transition-all duration-700 -z-10"
-      [class.bg-cyan-300]="view().isGood"
-      [class.bg-rose-400]="!view().isGood"
-    ></div>
-  </button>
-</div>
+      <span
+        class="max-w-0 opacity-0 group-hover/edit:max-w-[100px] group-hover/edit:opacity-100 group-hover/edit:ml-2 whitespace-nowrap text-[10px] font-black text-white tracking-tighter transition-all duration-500 ease-in-out uppercase z-10"
+      >
+        Edit Unit
+      </span>
+
+      <div
+        class="absolute -inset-1 blur-lg opacity-40 group-hover/edit:opacity-100 transition-all duration-700 -z-10"
+        [class.bg-cyan-300]="view().isGood"
+        [class.bg-rose-400]="!view().isGood"
+      ></div>
+    </button>
+  </div>
 
   <div
     class="card-corner top-left"
@@ -56,7 +71,9 @@
       class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000 ease-out"
     />
 
-    <div class="absolute inset-0 bg-gradient-to-t from-[#0c0f14] via-[#0c0f14]/20 to-transparent"></div>
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-[#0c0f14] via-[#0c0f14]/20 to-transparent"
+    ></div>
 
     <div
       class="absolute top-4 right-4 px-3 py-1 rounded-sm text-[9px] font-black tracking-[0.2em] uppercase border backdrop-blur-md z-20"
@@ -93,12 +110,18 @@
       >
         {{ view().name }}
       </h2>
-      <div class="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-[#0c0f14] to-transparent pointer-events-none"></div>
+      <div
+        class="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-[#0c0f14] to-transparent pointer-events-none"
+      ></div>
     </div>
 
-    <div class="space-y-4 bg-white/5 p-4 rounded-lg border border-white/10 backdrop-blur-xl shadow-2xl">
+    <div
+      class="space-y-4 bg-white/5 p-4 rounded-lg border border-white/10 backdrop-blur-xl shadow-2xl"
+    >
       <div class="flex-1">
-        <div class="flex justify-between text-[9px] font-bold uppercase text-slate-400 mb-2 tracking-[0.2em]">
+        <div
+          class="flex justify-between text-[9px] font-bold uppercase text-slate-400 mb-2 tracking-[0.2em]"
+        >
           <span>{{ view().mainStat.label }} Sync</span>
           <span [class.text-cyan-400]="view().isGood" [class.text-rose-400]="!view().isGood">
             {{ view().mainStat.percentage }}
@@ -134,7 +157,7 @@
 
         <button
           (click)="$event.stopPropagation(); openDetails()"
-          class="identify-btn px-5 py-2 bg-transparent text-[9px] font-black tracking-[0.2em] uppercase transition-all duration-300 border border-white/10 text-white rounded-sm cursor-pointer"
+          class="identify-btn px-5 py-2 bg-transparent text-[9px] font-black tracking-[0.2em] uppercase transition-all duration-300 text-white rounded-sm cursor-pointer"
         >
           Identify
         </button>

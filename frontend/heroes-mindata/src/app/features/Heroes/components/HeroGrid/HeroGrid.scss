@@ -1,3 +1,74 @@
 :host {
   display: block;
+  height: 100%;
+}
+
+.hero-viewport {
+  height: 100%;
+  width: 100%;
+}
+
+// ESTA ES LA CLAVE: El Virtual Scroll crea un contenedor interno.
+// Debemos forzarlo a ser un Grid.
+// Reseteo del contenedor interno de Angular CDK
+::ng-deep .cdk-virtual-scroll-content-wrapper {
+  display: grid !important;
+  // Definimos columnas fijas o responsivas
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+  gap: 2rem;
+  width: 100% !important;
+  padding: 1rem;
+}
+
+.hero-grid-row {
+  display: flex !important; // Forzar a flex horizontal
+  flex-direction: row !important; // Forzar a fila
+  justify-content: center; // Centrar las cards si sobra espacio
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 1rem 0; // Padding vertical para el gap entre filas
+  width: 100%;
+}
+
+.vanguard-item {
+  // Aseguramos que el ítem del grid no colapse
+  min-height: 400px; 
+  display: flex;
+  justify-content: center;
+}
+
+
+.vanguard-grid {
+  display: grid;
+  // Ajustamos el grid para que sea responsivo
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2.5rem;
+  width: 100%;
+}
+.hero-card-container {
+  // Aseguramos que la card tenga su ancho pero que pueda crecer si hay espacio
+  flex: 1 0 300px;
+  max-width: 400px; // Evitamos que la card se estire demasiado en pantallas gigantes
+  display: flex;
+  justify-content: center;
+}
+
+// Arreglo del Scrollbar para que sea visible y "Neon"
+.custom-scrollbar {
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 242, 255, 0.2);
+    border-radius: 10px;
+  }
+}
+
+.hero-render-wrapper {
+  content-visibility: auto;
+  contain-intrinsic-size: 320px 550px; 
+  
+  min-height: 500px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
